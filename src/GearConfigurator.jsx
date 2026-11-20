@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GEAR_ROLES, GEAR_CATEGORIES } from './gearData';
+import SoldierViewer3D from './SoldierViewer3D';
 
 export default function GearConfigurator({ currency, customRate, onCurrencyChange, currencies, formatPrice }) {
   const [role, setRole] = useState('assault');
@@ -128,7 +129,7 @@ export default function GearConfigurator({ currency, customRate, onCurrencyChang
   };
 
   const getCardStyle = (isSelected) => ({
-    padding: '12px 14px',
+    padding: '10px 12px',
     textAlign: 'left',
     borderRadius: '8px',
     cursor: 'pointer',
@@ -140,18 +141,18 @@ export default function GearConfigurator({ currency, customRate, onCurrencyChang
   });
 
   const renderSection = (title, items, selectedItem, onSelect) => (
-    <div style={{ backgroundColor: '#11161f', padding: '16px', borderRadius: '12px', border: '1px solid #1e293b' }}>
-      <div style={{ fontSize: '12px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>
+    <div style={{ backgroundColor: '#11161f', padding: '14px', borderRadius: '12px', border: '1px solid #1e293b' }}>
+      <div style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '10px' }}>
         {title}
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
         {items.map(item => (
           <button key={item.id} onClick={() => onSelect(item)} style={getCardStyle(selectedItem?.id === item.id)}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}>
-              <span style={{ fontWeight: '600', fontSize: '14px' }}>{item.name}</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontWeight: '600', fontSize: '13px', lineHeight: '1.3' }}>{item.name}</span>
               <span style={{ fontSize: '12px', fontWeight: '700', color: '#34d399', whiteSpace: 'nowrap' }}>{formatPrice(item.price)}</span>
             </div>
-            <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
+            <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>
               Вес: <strong style={{ color: '#e2e8f0' }}>{item.weight} кг</strong> {item.protection > 0 ? `• Защита: +${item.protection} ед.` : ''}
             </div>
           </button>
@@ -188,11 +189,11 @@ export default function GearConfigurator({ currency, customRate, onCurrencyChang
         </div>
       </div>
 
-      {/* Двухколоночная сетка */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '28px', alignItems: 'start' }}>
+      {/* ТРЁХКОЛОНОЧНАЯ СЕТКА: Слева выбор — По центру 3D-боец — Справа сводка */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '20px', alignItems: 'start' }}>
         
-        {/* ЛЕВАЯ КОЛОНКА */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        {/* ЛЕВАЯ КОЛОНКА: Выбор элементов */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           {renderSection('01. Бронезащита (Плитник и баллистика)', GEAR_CATEGORIES.armor, selectedArmor, setSelectedArmor)}
           {renderSection('02. Защита головы и активные наушники', GEAR_CATEGORIES.helmet, selectedHelmet, setSelectedHelmet)}
           {renderSection('03. Боекомплект, медицина и рюкзак', GEAR_CATEGORIES.loadout, selectedLoadout, setSelectedLoadout)}
@@ -200,13 +201,24 @@ export default function GearConfigurator({ currency, customRate, onCurrencyChang
           {renderSection('05. Полевая форма и обувь', GEAR_CATEGORIES.uniform, selectedUniform, setSelectedUniform)}
         </div>
 
+        {/* ЦЕНТРАЛЬНАЯ КОЛОНКА: Интерактивный 3D-манекен */}
+        <div style={{ position: 'sticky', top: '20px' }}>
+          <SoldierViewer3D
+            armor={selectedArmor}
+            helmet={selectedHelmet}
+            loadout={selectedLoadout}
+            optics={selectedOptics}
+            uniform={selectedUniform}
+          />
+        </div>
+
         {/* ПРАВАЯ КОЛОНКА: Сводка по экипировке */}
-        <div style={{ position: 'sticky', top: '20px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
-          <div style={{ backgroundColor: '#11161f', padding: '22px', borderRadius: '14px', border: '1px solid #2d3748', boxShadow: '0 10px 30px rgba(0,0,0,0.4)' }}>
+        <div style={{ position: 'sticky', top: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ backgroundColor: '#11161f', padding: '20px', borderRadius: '14px', border: '1px solid #2d3748', boxShadow: '0 10px 30px rgba(0,0,0,0.4)' }}>
             
             {/* Блок бюджета */}
-            <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '12px', padding: '16px', marginBottom: '20px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+            <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '12px', padding: '14px', marginBottom: '18px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <span style={{ fontSize: '11px', fontWeight: '800', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
                   💰 Стоимость комплекта
                 </span>
@@ -216,7 +228,7 @@ export default function GearConfigurator({ currency, customRate, onCurrencyChang
                       key={curr}
                       onClick={() => onCurrencyChange(curr)}
                       style={{
-                        padding: '3px 7px', fontSize: '11px', fontWeight: '700', borderRadius: '4px', border: 'none', cursor: 'pointer',
+                        padding: '3px 6px', fontSize: '10px', fontWeight: '700', borderRadius: '4px', border: 'none', cursor: 'pointer',
                         backgroundColor: currency === curr ? '#10b981' : 'transparent',
                         color: currency === curr ? '#064e3b' : '#94a3b8'
                       }}
@@ -226,37 +238,37 @@ export default function GearConfigurator({ currency, customRate, onCurrencyChang
                   ))}
                 </div>
               </div>
-              <div style={{ fontSize: '30px', fontWeight: '800', color: '#f8fafc', letterSpacing: '-0.5px' }}>
+              <div style={{ fontSize: '28px', fontWeight: '800', color: '#f8fafc', letterSpacing: '-0.5px' }}>
                 {formatPrice(totalUsd)}
               </div>
             </div>
 
             {/* Показатели бойца */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-              <span style={{ fontSize: '12px', fontWeight: '700', color: '#3b82f6', textTransform: 'uppercase', letterSpacing: '1px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', gap: '8px', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '11px', fontWeight: '700', color: '#3b82f6', textTransform: 'uppercase', letterSpacing: '1px' }}>
                 ● СВОДКА НАГРУЗКИ
               </span>
-              <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '20px', backgroundColor: 'rgba(255,255,255,0.05)', color: statusColor, fontWeight: '600', border: `1px solid ${statusColor}40` }}>
+              <span style={{ fontSize: '10px', padding: '3px 8px', borderRadius: '20px', backgroundColor: 'rgba(255,255,255,0.05)', color: statusColor, fontWeight: '600', border: `1px solid ${statusColor}40` }}>
                 {mobilityStatus}
               </span>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '18px' }}>
-              <div style={{ backgroundColor: '#161b22', padding: '14px', borderRadius: '10px', border: '1px solid #1e293b' }}>
-                <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: '700' }}>Общий боевой вес</div>
-                <div style={{ fontSize: '26px', fontWeight: '800', color: statusColor, marginTop: '2px' }}>{totalWeightKg} <span style={{ fontSize: '14px', color: '#64748b' }}>кг</span></div>
-                <div style={{ fontSize: '11px', color: '#94a3b8' }}>Норма роли: до {currentRole.maxRecommendedWeight} кг</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
+              <div style={{ backgroundColor: '#161b22', padding: '12px', borderRadius: '10px', border: '1px solid #1e293b' }}>
+                <div style={{ fontSize: '10px', color: '#64748b', textTransform: 'uppercase', fontWeight: '700' }}>Боевой вес</div>
+                <div style={{ fontSize: '24px', fontWeight: '800', color: statusColor, marginTop: '2px' }}>{totalWeightKg} <span style={{ fontSize: '13px', color: '#64748b' }}>кг</span></div>
+                <div style={{ fontSize: '10px', color: '#94a3b8' }}>Норма: до {currentRole.maxRecommendedWeight} кг</div>
               </div>
 
-              <div style={{ backgroundColor: '#161b22', padding: '14px', borderRadius: '10px', border: '1px solid #1e293b' }}>
-                <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: '700' }}>Индекс защиты</div>
-                <div style={{ fontSize: '26px', fontWeight: '800', color: '#38bdf8', marginTop: '2px' }}>{protectionPercent}<span style={{ fontSize: '14px', color: '#64748b' }}>%</span></div>
-                <div style={{ fontSize: '11px', color: '#94a3b8' }}>Баллистика + оптика</div>
+              <div style={{ backgroundColor: '#161b22', padding: '12px', borderRadius: '10px', border: '1px solid #1e293b' }}>
+                <div style={{ fontSize: '10px', color: '#64748b', textTransform: 'uppercase', fontWeight: '700' }}>Защита</div>
+                <div style={{ fontSize: '24px', fontWeight: '800', color: '#38bdf8', marginTop: '2px' }}>{protectionPercent}<span style={{ fontSize: '13px', color: '#64748b' }}>%</span></div>
+                <div style={{ fontSize: '10px', color: '#94a3b8' }}>Баллистика + оптика</div>
               </div>
             </div>
 
             {/* Шкала весовой нагрузки */}
-            <div style={{ marginBottom: '18px' }}>
+            <div style={{ marginBottom: '16px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#94a3b8', marginBottom: '5px' }}>
                 <span>Шкала весовой нагрузки</span>
                 <span>{totalWeightKg} / 35.0 кг</span>
@@ -268,39 +280,39 @@ export default function GearConfigurator({ currency, customRate, onCurrencyChang
 
             {/* Предупреждения */}
             {warnings.length > 0 ? (
-              <div style={{ padding: '12px 14px', backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.4)', borderRadius: '10px', marginBottom: '18px' }}>
-                <div style={{ fontSize: '12px', fontWeight: '700', color: '#f87171', marginBottom: '4px' }}>⚠️ РЕКОМЕНДАЦИИ ПО КОМПЛЕКТУ</div>
-                <ul style={{ margin: 0, paddingLeft: '18px', color: '#fca5a5', fontSize: '12px', lineHeight: '1.4' }}>
+              <div style={{ padding: '10px 12px', backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.4)', borderRadius: '10px', marginBottom: '16px' }}>
+                <div style={{ fontSize: '11px', fontWeight: '700', color: '#f87171', marginBottom: '4px' }}>⚠️ РЕКОМЕНДАЦИИ</div>
+                <ul style={{ margin: 0, paddingLeft: '16px', color: '#fca5a5', fontSize: '11px', lineHeight: '1.4' }}>
                   {warnings.map((w, i) => <li key={i}>{w}</li>)}
                 </ul>
               </div>
             ) : (
-              <div style={{ padding: '10px 14px', backgroundColor: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '10px', marginBottom: '18px', fontSize: '12px', color: '#6ee7b7', fontWeight: '500' }}>
+              <div style={{ padding: '10px 12px', backgroundColor: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '10px', marginBottom: '16px', fontSize: '11px', color: '#6ee7b7', fontWeight: '500' }}>
                 ✅ Вес и защита сбалансированы под задачи роли
               </div>
             )}
 
             {/* Сохранение и копирование */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <input
                 type="text"
-                placeholder="Название комплекта (например: Основной штурм)"
+                placeholder="Название комплекта..."
                 value={kitName}
                 onChange={(e) => setKitName(e.target.value)}
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #2d3748', backgroundColor: '#0b0e14', color: '#fff', fontSize: '13px' }}
+                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #2d3748', backgroundColor: '#0b0e14', color: '#fff', fontSize: '12px' }}
               />
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                 <button
                   onClick={handleSaveKit}
-                  style={{ padding: '10px', borderRadius: '8px', border: 'none', cursor: 'pointer', backgroundColor: '#10b981', color: '#064e3b', fontWeight: '700', fontSize: '13px' }}
+                  style={{ padding: '9px', borderRadius: '8px', border: 'none', cursor: 'pointer', backgroundColor: '#10b981', color: '#064e3b', fontWeight: '700', fontSize: '12px' }}
                 >
-                  💾 Сохранить комплект
+                  💾 Сохранить
                 </button>
                 <button
                   onClick={handleCopySpec}
-                  style={{ padding: '10px', borderRadius: '8px', border: '1px solid #3b82f6', cursor: 'pointer', backgroundColor: copied ? '#3b82f6' : 'rgba(59, 130, 246, 0.1)', color: '#fff', fontWeight: '700', fontSize: '13px' }}
+                  style={{ padding: '9px', borderRadius: '8px', border: '1px solid #3b82f6', cursor: 'pointer', backgroundColor: copied ? '#3b82f6' : 'rgba(59, 130, 246, 0.1)', color: '#fff', fontWeight: '700', fontSize: '12px' }}
                 >
-                  {copied ? '✅ Скопировано!' : '📋 Копировать ведомость'}
+                  {copied ? '✅ Скопировано!' : '📋 Ведомость'}
                 </button>
               </div>
             </div>
@@ -309,22 +321,22 @@ export default function GearConfigurator({ currency, customRate, onCurrencyChang
 
           {/* Сохранённые комплекты */}
           {savedKits.length > 0 && (
-            <div style={{ backgroundColor: '#11161f', padding: '18px', borderRadius: '14px', border: '1px solid #1e293b' }}>
-              <div style={{ fontSize: '12px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '12px' }}>
+            <div style={{ backgroundColor: '#11161f', padding: '16px', borderRadius: '14px', border: '1px solid #1e293b' }}>
+              <div style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '10px' }}>
                 🎒 Сохранённые комплекты ({savedKits.length})
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {savedKits.map(kit => (
-                  <div key={kit.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', backgroundColor: '#161b22', borderRadius: '8px', border: '1px solid #2d3748' }}>
+                  <div key={kit.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', backgroundColor: '#161b22', borderRadius: '8px', border: '1px solid #2d3748' }}>
                     <div>
-                      <div style={{ fontWeight: '600', fontSize: '13px', color: '#f8fafc' }}>{kit.name}</div>
-                      <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>{kit.summary}</div>
+                      <div style={{ fontWeight: '600', fontSize: '12px', color: '#f8fafc' }}>{kit.name}</div>
+                      <div style={{ fontSize: '10px', color: '#64748b', marginTop: '2px' }}>{kit.summary}</div>
                     </div>
                     <div style={{ display: 'flex', gap: '6px' }}>
-                      <button onClick={() => handleLoadKit(kit)} style={{ padding: '5px 10px', borderRadius: '6px', border: '1px solid #10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', color: '#34d399', cursor: 'pointer', fontSize: '11px', fontWeight: '600' }}>
+                      <button onClick={() => handleLoadKit(kit)} style={{ padding: '4px 8px', borderRadius: '6px', border: '1px solid #10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', color: '#34d399', cursor: 'pointer', fontSize: '11px', fontWeight: '600' }}>
                         Открыть
                       </button>
-                      <button onClick={() => handleDeleteKit(kit.id)} style={{ padding: '5px 8px', borderRadius: '6px', border: '1px solid #ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#f87171', cursor: 'pointer', fontSize: '11px' }}>
+                      <button onClick={() => handleDeleteKit(kit.id)} style={{ padding: '4px 7px', borderRadius: '6px', border: '1px solid #ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#f87171', cursor: 'pointer', fontSize: '11px' }}>
                         ✕
                       </button>
                     </div>
