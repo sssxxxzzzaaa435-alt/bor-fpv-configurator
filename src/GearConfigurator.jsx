@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { GEAR_CATEGORIES } from './gearData';
+import SoldierViewer3D from './SoldierViewer3D';
 
 export default function GearConfigurator() {
   const [activeStep, setActiveStep] = useState(1);
 
   const [equipment, setEquipment] = useState({
-    baseId: 'ar2', // По умолчанию ставим общевойсковой плитник
+    baseId: 'ar2',
     plates: { front: 'ceramic_br5', back: 'ceramic_br5', side: 'none' },
     modules: {
       neck: true, abdomen: true, groin: true, shoulders: true,
@@ -27,17 +28,17 @@ export default function GearConfigurator() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
-      {/* Левая колонка: Место под 3D */}
-      <div className="bg-gray-800 rounded-lg p-4 flex flex-col items-center justify-center min-h-[600px] border border-gray-700">
-        <h2 className="text-xl font-bold mb-4 text-white">3D Визуализация (TRELLIS)</h2>
-        <div className="text-gray-500 border-2 border-dashed border-gray-600 rounded-lg w-full h-full flex flex-col items-center justify-center p-6 text-center">
-          <span className="text-4xl mb-2">🧊</span>
-          <p>Сюда мы подключим файл .glb, когда он сгенерируется.</p>
-        </div>
+      {/* Левая колонка: 3D Визуализация */}
+      <div>
+        <SoldierViewer3D 
+          armor={{ id: equipment.baseId }} 
+          helmet={{ id: equipment.helmetId }} 
+          optics={{ id: 'op1' }} 
+        />
       </div>
 
       {/* Правая колонка: Аккордеон */}
-      <div className="bg-gray-900 rounded-lg p-4 space-y-3 border border-gray-700 h-[600px] overflow-y-auto">
+      <div className="bg-gray-900 rounded-lg p-4 space-y-3 border border-gray-700 h-[620px] overflow-y-auto">
         {steps.map((step) => (
           <div key={step.id} className="border border-gray-700 rounded-lg overflow-hidden bg-gray-800">
             <button
