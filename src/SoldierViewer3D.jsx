@@ -18,7 +18,7 @@ function MannequinModel() {
 
   return (
     // Center автоматически выровняет модель по центру подиума (bottom ставит ровно на пол y = 0)
-    <Center bottom position={[0, 0.88, 0]}>
+    <Center bottom position={[0, 1.76, 0]}>
       <primitive object={scene} scale={1.75} />
     </Center>
   );
