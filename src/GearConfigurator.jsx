@@ -387,4 +387,67 @@ export default function GearConfigurator({ onOpenKnowledge }) {
                 </ul>
               </div>
             ) : (
-              <div style={{ padding: '10px 12px', backgroundColor: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '10px', marginBottom: '16px', fontSize: '11px', color: '#6ee7b7', fontWeight: '50
+              <div style={{ padding: '10px 12px', backgroundColor: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '10px', marginBottom: '16px', fontSize: '11px', color: '#6ee7b7', fontWeight: '500' }}>
+                ✅ Масса и площадь защиты сбалансированы под задачи роли
+              </div>
+            )}
+
+            {/* Сохранение и копирование ведомости ТТХ */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <input
+                type="text"
+                placeholder="Название профиля (например: Штурм застройки)"
+                value={kitName}
+                onChange={(e) => setKitName(e.target.value)}
+                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #2d3748', backgroundColor: '#0b0e14', color: '#fff', fontSize: '12px' }}
+              />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                <button
+                  onClick={handleSaveKit}
+                  style={{ padding: '9px', borderRadius: '8px', border: 'none', cursor: 'pointer', backgroundColor: '#10b981', color: '#064e3b', fontWeight: '700', fontSize: '12px' }}
+                >
+                  💾 Сохранить профиль
+                </button>
+                <button
+                  onClick={handleCopySpec}
+                  style={{ padding: '9px', borderRadius: '8px', border: '1px solid #3b82f6', cursor: 'pointer', backgroundColor: copied ? '#3b82f6' : 'rgba(59, 130, 246, 0.1)', color: '#fff', fontWeight: '700', fontSize: '12px' }}
+                >
+                  {copied ? '✅ Скопировано!' : '📋 Копировать ТТХ'}
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Сохранённые профили */}
+          {savedKits.length > 0 && (
+            <div style={{ backgroundColor: '#11161f', padding: '16px', borderRadius: '14px', border: '1px solid #1e293b' }}>
+              <div style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '10px' }}>
+                🎒 Сохранённые профили ({savedKits.length})
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {savedKits.map(kit => (
+                  <div key={kit.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', backgroundColor: '#161b22', borderRadius: '8px', border: '1px solid #2d3748' }}>
+                    <div>
+                      <div style={{ fontWeight: '600', fontSize: '12px', color: '#f8fafc' }}>{kit.name}</div>
+                      <div style={{ fontSize: '10px', color: '#64748b', marginTop: '2px' }}>{kit.summary}</div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '6px' }}>
+                      <button onClick={() => handleLoadKit(kit)} style={{ padding: '4px 8px', borderRadius: '6px', border: '1px solid #10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', color: '#34d399', cursor: 'pointer', fontSize: '11px', fontWeight: '600' }}>
+                        Открыть
+                      </button>
+                      <button onClick={() => handleDeleteKit(kit.id)} style={{ padding: '4px 7px', borderRadius: '6px', border: '1px solid #ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#f87171', cursor: 'pointer', fontSize: '11px' }}>
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+      </div>
+    </div>
+  );
+}
