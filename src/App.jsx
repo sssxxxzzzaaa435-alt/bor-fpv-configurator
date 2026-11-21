@@ -97,11 +97,9 @@ const PORTAL_SECTIONS = [
 ];
 
 function App() {
-  // 'hub' — главный экран 3x3 на весь экран; или 'drone' | 'gear' | 'training' | 'reference'
   const [activeSection, setActiveSection] = useState('hub');
   const [knowledgeTargetId, setKnowledgeTargetId] = useState(null);
 
-  // Стартовый экран-заставка
   const [showSplash, setShowSplash] = useState(true);
   const [splashFading, setSplashFading] = useState(false);
 
@@ -113,14 +111,12 @@ function App() {
     }, 650);
   };
 
-  // Переход из микро-значков экипировки прямо в нужную статью Справочника или Обучения
   const handleOpenKnowledge = (sectionMode, itemId) => {
     setKnowledgeTargetId(itemId);
     setActiveSection(sectionMode);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // --- СОСТОЯНИЯ КОНФИГУРАТОРА БПЛА (Раздел 01) ---
   const [frameSize, setFrameSize] = useState('5"');
   const currentSpec = DRONE_SPECS[frameSize];
 
@@ -152,7 +148,6 @@ function App() {
     setSelectedBattery(spec.batteries[0]);
   };
 
-  // Инженерная физика БПЛА (без коммерческих цен)
   const miscElectronicsWeight = frameSize === '3"' ? 25 : frameSize === '10"' ? 85 : 45;
   const dryWeight = Math.round(
     selectedFrame.weight +
@@ -316,7 +311,6 @@ function App() {
 
   return (
     <>
-      {/* СТАРТОВЫЙ ЭКРАН-ЗАСТАВКА */}
       {showSplash && (
         <div
           onClick={handleEnterApp}
@@ -382,7 +376,6 @@ function App() {
         </div>
       )}
 
-      {/* ЭКРАН 1: ГЛАВНОЕ МЕНЮ 3x3 НА ВЕСЬ ЭКРАН (9 одинаковых прямоугольников) */}
       {activeSection === 'hub' ? (
         <div
           style={{
@@ -394,7 +387,6 @@ function App() {
             backgroundColor: '#0b0e14'
           }}
         >
-          {/* Компактная верхняя строка терминала */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div style={{ width: '34px', height: '34px', borderRadius: '8px', background: 'linear-gradient(135deg, #3b82f6, #10b981)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '16px', color: '#fff' }}>
@@ -412,7 +404,6 @@ function App() {
             </div>
           </div>
 
-          {/* СЕТКА 3x3 НА ВЕСЬ ЭКРАН */}
           <div
             style={{
               flex: 1,
@@ -463,7 +454,6 @@ function App() {
                   }
                 }}
               >
-                {/* Верхняя строка карточки: номер + статус */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                   <span style={{ fontSize: '13px', fontWeight: '900', letterSpacing: '1.5px', color: sec.accent }}>
                     РАЗДЕЛ {sec.num}
@@ -483,7 +473,6 @@ function App() {
                   </span>
                 </div>
 
-                {/* Центр карточки: иконка и название */}
                 <div style={{ margin: '10px 0' }}>
                   <div style={{ fontSize: '34px', marginBottom: '8px' }}>{sec.icon}</div>
                   <div style={{ fontSize: '20px', fontWeight: '800', color: '#f8fafc', lineHeight: '1.25' }}>
@@ -491,7 +480,6 @@ function App() {
                   </div>
                 </div>
 
-                {/* Низ карточки: описание */}
                 <div style={{ fontSize: '12px', color: '#94a3b8', lineHeight: '1.45' }}>
                   {sec.subtitle}
                 </div>
@@ -500,10 +488,7 @@ function App() {
           </div>
         </div>
       ) : (
-        /* ЭКРАН 2: ВНУТРЕННИЕ РАЗДЕЛЫ С КНОПКОЙ ВОЗВРАТА В СЕТКУ 3x3 */
         <div style={{ maxWidth: '1340px', margin: '0 auto', padding: '22px 24px' }}>
-          
-          {/* Навигационная шапка портала */}
           <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px', paddingBottom: '18px', borderBottom: '1px solid #1e293b', marginBottom: '22px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
               <button
@@ -539,7 +524,6 @@ function App() {
               </div>
             </div>
 
-            {/* Быстрый переключатель между 4 активными разделами */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', backgroundColor: '#11161f', padding: '5px', borderRadius: '12px', border: '1px solid #2d3748' }}>
               {PORTAL_SECTIONS.filter(s => s.ready).map(sec => {
                 const isActive = activeSection === sec.id;
@@ -568,7 +552,6 @@ function App() {
             </div>
           </header>
 
-          {/* СОДЕРЖИМОЕ АКТИВНОГО РАЗДЕЛА */}
           {activeSection === 'gear' && (
             <GearConfigurator onOpenKnowledge={handleOpenKnowledge} />
           )}
@@ -591,7 +574,6 @@ function App() {
 
           {activeSection === 'drone' && (
             <>
-              {/* Переключатель классов дрона + кнопка в справочник */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '20px', backgroundColor: '#11161f', padding: '12px 18px', borderRadius: '12px', border: '1px solid #1e293b' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
                   <span style={{ fontSize: '13px', fontWeight: '600', color: '#94a3b8' }}>
@@ -635,10 +617,242 @@ function App() {
                 </div>
               </div>
 
-              {/* Основная двухколоночная сетка БПЛА (чистые ТТХ без цен) */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '28px', alignItems: 'start' }}>
-                
-                {/* ЛЕВАЯ КОЛОНКА: Выбор комплектующих */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                    <div style={{ backgroundColor: '#11161f', padding: '16
+                    <div style={{ backgroundColor: '#11161f', padding: '16px', borderRadius: '12px', border: '1px solid #1e293b' }}>
+                      <div style={{ fontSize: '12px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>01. Рама (Frame)</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {currentSpec.frames.map(frame => (
+                          <button key={frame.id} onClick={() => setSelectedFrame(frame)} style={getCardStyle(selectedFrame?.id === frame.id)}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span style={{ fontWeight: '600', fontSize: '14px' }}>{frame.name}</span>
+                              <span style={{ fontSize: '11px', fontWeight: '700', color: '#38bdf8' }}>{frame.weight} г</span>
+                            </div>
+                            <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>Посадка моторов: {frame.mount} мм</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div style={{ backgroundColor: '#11161f', padding: '16px', borderRadius: '12px', border: '1px solid #1e293b' }}>
+                      <div style={{ fontSize: '12px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>02. Моторы (4 шт)</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {currentSpec.motors.map(motor => (
+                          <button key={motor.id} onClick={() => setSelectedMotor(motor)} style={getCardStyle(selectedMotor?.id === motor.id)}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span style={{ fontWeight: '600', fontSize: '14px' }}>{motor.name} <span style={{ color: '#3b82f6', fontSize: '12px' }}>({motor.recommendedCells}S)</span></span>
+                              <span style={{ fontSize: '11px', fontWeight: '700', color: '#38bdf8' }}>{motor.weight * 4} г</span>
+                            </div>
+                            <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>Крепл. {motor.mount} мм • Пик {motor.amps}A • Тяга {motor.maxThrust}г</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div style={{ backgroundColor: '#11161f', padding: '16px', borderRadius: '12px', border: '1px solid #1e293b' }}>
+                      <div style={{ fontSize: '12px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>03. Пропеллеры</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {currentSpec.props.map(prop => (
+                          <button key={prop.id} onClick={() => setSelectedProp(prop)} style={getCardStyle(selectedProp?.id === prop.id)}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
+                              <span style={{ fontWeight: '600', fontSize: '13px' }}>{prop.name}</span>
+                              <span style={{ fontSize: '11px', fontWeight: '700', color: '#38bdf8', whiteSpace: 'nowrap' }}>{prop.weight * 4} г</span>
+                            </div>
+                            <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>Коэф. тяги: x{prop.thrustFactor}</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div style={{ backgroundColor: '#11161f', padding: '16px', borderRadius: '12px', border: '1px solid #1e293b' }}>
+                      <div style={{ fontSize: '12px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>04. Регулятор (ESC)</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {currentSpec.escs.map(esc => (
+                          <button key={esc.id} onClick={() => setSelectedEsc(esc)} style={getCardStyle(selectedEsc?.id === esc.id)}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span style={{ fontWeight: '600', fontSize: '14px' }}>{esc.name}</span>
+                              <span style={{ fontSize: '11px', fontWeight: '700', color: '#38bdf8' }}>{esc.weight} г</span>
+                            </div>
+                            <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>Ток до {esc.maxAmps}A • Напряжение до {esc.maxCells}S</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ backgroundColor: '#11161f', padding: '16px', borderRadius: '12px', border: '1px solid #1e293b' }}>
+                    <div style={{ fontSize: '12px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>05. Аккумулятор (LiPo / Li-Ion)</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                      {currentSpec.batteries.map(bat => (
+                        <button key={bat.id} onClick={() => setSelectedBattery(bat)} style={getCardStyle(selectedBattery?.id === bat.id)}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontWeight: '600', fontSize: '14px' }}>{bat.name}</span>
+                            <span style={{ fontSize: '11px', fontWeight: '700', color: '#38bdf8' }}>{bat.weight} г</span>
+                          </div>
+                          <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>Энергоёмкость: {Math.round((bat.mah / 1000) * bat.cells * 3.7)} Вт·ч</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div style={{ backgroundColor: '#11161f', padding: '16px', borderRadius: '12px', border: '1px solid #1e293b' }}>
+                    <div style={{ fontSize: '12px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>06. Полезная нагрузка (Оптика / Груз)</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px' }}>
+                      {PAYLOAD_OPTIONS.map(cam => (
+                        <button key={cam.id} onClick={() => setSelectedPayload(cam)} style={getCardStyle(selectedPayload?.id === cam.id)}>
+                          <div style={{ fontWeight: '600', fontSize: '13px' }}>{cam.name}</div>
+                          <div style={{ fontSize: '12px', marginTop: '6px', color: '#38bdf8', fontWeight: '700' }}>
+                            Масса: +{cam.weight} г
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ position: 'sticky', top: '20px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                  <div style={{ backgroundColor: '#11161f', padding: '22px', borderRadius: '14px', border: '1px solid #2d3748', boxShadow: '0 10px 30px rgba(0,0,0,0.4)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                      <span style={{ fontSize: '12px', fontWeight: '800', color: '#3b82f6', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                        ● РАСЧЁТНЫЕ ТТХ БОРТА
+                      </span>
+                      <span style={{ fontSize: '12px', padding: '4px 10px', borderRadius: '20px', backgroundColor: 'rgba(255,255,255,0.05)', color: statusColor, fontWeight: '600', border: `1px solid ${statusColor}40` }}>
+                        {flightCharacter}
+                      </span>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '18px' }}>
+                      <div style={{ backgroundColor: '#161b22', padding: '12px 14px', borderRadius: '10px', border: '1px solid #1e293b' }}>
+                        <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: '700' }}>Взлётный вес (AUW)</div>
+                        <div style={{ fontSize: '24px', fontWeight: '800', color: '#f8fafc', marginTop: '2px' }}>{totalWeight} <span style={{ fontSize: '13px', color: '#64748b' }}>г</span></div>
+                        <div style={{ fontSize: '11px', color: '#94a3b8' }}>Сухой борт: {dryWeight} г</div>
+                      </div>
+
+                      <div style={{ backgroundColor: '#161b22', padding: '12px 14px', borderRadius: '10px', border: '1px solid #1e293b' }}>
+                        <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: '700' }}>Тяговооружённость</div>
+                        <div style={{ fontSize: '24px', fontWeight: '800', color: statusColor, marginTop: '2px' }}>{thrustToWeight} <span style={{ fontSize: '13px', color: '#64748b' }}>: 1</span></div>
+                        <div style={{ fontSize: '11px', color: '#94a3b8' }}>Макс. тяга: ~{totalThrust} г</div>
+                      </div>
+
+                      <div style={{ backgroundColor: '#161b22', padding: '12px 14px', borderRadius: '10px', border: '1px solid #1e293b' }}>
+                        <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: '700' }}>Время полёта</div>
+                        <div style={{ fontSize: '22px', fontWeight: '800', color: '#38bdf8', marginTop: '2px' }}>~{cruiseMinutes} <span style={{ fontSize: '13px', color: '#64748b' }}>мин</span></div>
+                        <div style={{ fontSize: '11px', color: '#94a3b8' }}>Активный режим: ~{freestyleMinutes} мин</div>
+                      </div>
+
+                      <div style={{ backgroundColor: '#161b22', padding: '12px 14px', borderRadius: '10px', border: '1px solid #1e293b' }}>
+                        <div style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: '700' }}>Пиковый ток / Запас</div>
+                        <div style={{ fontSize: '22px', fontWeight: '800', color: '#fb923c', marginTop: '2px' }}>{totalPeakAmps} <span style={{ fontSize: '13px', color: '#64748b' }}>A</span></div>
+                        <div style={{ fontSize: '11px', color: '#94a3b8' }}>Батарея: {totalWh} Вт·ч ({gramsPerWatt} г/Вт)</div>
+                      </div>
+                    </div>
+
+                    <div style={{ marginBottom: '18px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#94a3b8', marginBottom: '5px' }}>
+                        <span>Шкала тяговооружённости (TWR)</span>
+                        <span>{thrustToWeight} / 10.0</span>
+                      </div>
+                      <div style={{ width: '100%', height: '7px', backgroundColor: '#1e293b', borderRadius: '4px', overflow: 'hidden' }}>
+                        <div style={{ width: `${twrPercent}%`, height: '100%', backgroundColor: statusColor, transition: 'width 0.3s ease, background-color 0.3s ease' }} />
+                      </div>
+                    </div>
+
+                    {warnings.length > 0 ? (
+                      <div style={{ padding: '12px 14px', backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.4)', borderRadius: '10px', marginBottom: '18px' }}>
+                        <div style={{ fontSize: '12px', fontWeight: '700', color: '#f87171', marginBottom: '4px' }}>⚠️ ИНЖЕНЕРНЫЕ ОШИБКИ СОВМЕСТИМОСТИ</div>
+                        <ul style={{ margin: 0, paddingLeft: '18px', color: '#fca5a5', fontSize: '12px', lineHeight: '1.4' }}>
+                          {warnings.map((w, i) => <li key={i}>{w}</li>)}
+                        </ul>
+                      </div>
+                    ) : (
+                      <div style={{ padding: '10px 14px', backgroundColor: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '10px', marginBottom: '18px', fontSize: '12px', color: '#6ee7b7', fontWeight: '500' }}>
+                        ✅ Геометрия креплений, токи и напряжение полностью согласованы
+                      </div>
+                    )}
+
+                    <div style={{ backgroundColor: '#161b22', padding: '12px 14px', borderRadius: '10px', border: '1px solid #1e293b', marginBottom: '18px' }}>
+                      <div style={{ fontSize: '11px', fontWeight: '700', color: '#eab308', textTransform: 'uppercase', marginBottom: '8px' }}>⚡ Спецификация монтажа и пайки</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '12px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #1e293b', paddingBottom: '5px' }}>
+                          <span style={{ color: '#94a3b8' }}>Силовой провод + разъём:</span>
+                          <span style={{ fontWeight: '600', color: '#f8fafc' }}>{dynamicWiring.powerWire} ({dynamicWiring.connector})</span>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #1e293b', paddingBottom: '5px' }}>
+                          <span style={{ color: '#94a3b8' }}>Провода на моторы:</span>
+                          <span style={{ fontWeight: '600', color: '#f8fafc' }}>{dynamicWiring.motorWire}</span>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #1e293b', paddingBottom: '5px' }}>
+                          <span style={{ color: '#94a3b8' }}>Фильтрация / защита:</span>
+                          <span style={{ fontWeight: '600', color: '#f8fafc' }}>{dynamicWiring.capacitor}</span>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <span style={{ color: '#94a3b8' }}>Первичный запуск:</span>
+                          <span style={{ fontWeight: '600', color: '#f8fafc' }}>{dynamicWiring.smokeStopper}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <input
+                        type="text"
+                        placeholder="Маркировка борта (например: 7&quot; Дальний носитель)"
+                        value={buildName}
+                        onChange={(e) => setBuildName(e.target.value)}
+                        style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #2d3748', backgroundColor: '#0b0e14', color: '#fff', fontSize: '13px' }}
+                      />
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                        <button
+                          onClick={handleSaveBuild}
+                          style={{ padding: '10px', borderRadius: '8px', border: 'none', cursor: 'pointer', backgroundColor: '#10b981', color: '#064e3b', fontWeight: '700', fontSize: '13px' }}
+                        >
+                          💾 Сохранить в ангар
+                        </button>
+                        <button
+                          onClick={handleCopySpec}
+                          style={{ padding: '10px', borderRadius: '8px', border: '1px solid #3b82f6', cursor: 'pointer', backgroundColor: copied ? '#3b82f6' : 'rgba(59, 130, 246, 0.1)', color: '#fff', fontWeight: '700', fontSize: '13px' }}
+                        >
+                          {copied ? '✅ Скопировано!' : '📋 Копировать ТТХ'}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {savedBuilds.length > 0 && (
+                    <div style={{ backgroundColor: '#11161f', padding: '18px', borderRadius: '14px', border: '1px solid #1e293b' }}>
+                      <div style={{ fontSize: '12px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '12px' }}>
+                        📁 Ангар конфигураций ({savedBuilds.length})
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {savedBuilds.map(build => (
+                          <div key={build.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', backgroundColor: '#161b22', borderRadius: '8px', border: '1px solid #2d3748' }}>
+                            <div>
+                              <div style={{ fontWeight: '600', fontSize: '13px', color: '#f8fafc' }}>{build.name}</div>
+                              <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>{build.frameSize} • {build.summary}</div>
+                            </div>
+                            <div style={{ display: 'flex', gap: '6px' }}>
+                              <button onClick={() => handleLoadBuild(build)} style={{ padding: '5px 10px', borderRadius: '6px', border: '1px solid #10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', color: '#34d399', cursor: 'pointer', fontSize: '11px', fontWeight: '600' }}>
+                                Открыть
+                              </button>
+                              <button onClick={() => handleDeleteBuild(build.id)} style={{ padding: '5px 8px', borderRadius: '6px', border: '1px solid #ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#f87171', cursor: 'pointer', fontSize: '11px' }}>
+                                ✕
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </>
+  );
+}
+
+export default App;
